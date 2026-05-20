@@ -4,9 +4,10 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rest_framework.routers import DefaultRouter
+from django.urls import path
 
 router = DefaultRouter()
-from django.urls import path
+
 
 app_name = "users"
 router.register("", UserViewSet, basename="users")
