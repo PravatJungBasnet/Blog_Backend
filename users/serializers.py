@@ -26,3 +26,9 @@ class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ["email", "first_name", "last_name", "profile_picture", "address"]
+
+
+class UserBriefSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["email", "first_name", "last_name", "profile_picture"]
