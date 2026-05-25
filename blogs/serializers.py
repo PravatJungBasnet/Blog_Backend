@@ -9,6 +9,7 @@ class BlogSerializer(BaseSerializer):
         fields = [
             "id",
             "title",
+            "cover_image",
             "content",
             "status",
             "created_by",
@@ -21,3 +22,9 @@ class BlogSerializer(BaseSerializer):
             "created_by": UserBriefSerializer,
             "updated_by": UserBriefSerializer,
         }
+
+
+class BlogBriefSerializer(BaseSerializer):
+    class Meta:
+        model = Blog
+        fields = ["id", "title", "cover_image", "content", "status", "created_at"]

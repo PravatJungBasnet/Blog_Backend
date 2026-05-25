@@ -10,6 +10,7 @@ class PostStatus(models.TextChoices):
 
 class Blog(BaseModel):
     title = models.CharField(max_length=255)
+    cover_image = models.ImageField(upload_to="blog_covers/", null=True, blank=True)
     content = models.TextField()
     status = models.CharField(max_length=20, choices=PostStatus.choices)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
