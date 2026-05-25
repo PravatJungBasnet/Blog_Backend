@@ -5,6 +5,8 @@ from .serializers import UserRegisterSerializer, UserSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from blogs.models import Blog
+from blogs.serializers import BlogBriefSerializer
 
 
 class UserViewSet(ModelViewSet):
@@ -17,7 +19,6 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=["get", "put", "patch"])
     def profile(self, request):
         user = request.user
-        print(user.email)
         if request.method == "GET":
             serializer = self.get_serializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -25,3 +26,10 @@ class UserViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=["get"])
+    def my_blogs(self, request):
+        user = request.user
+        blogs = Blog.objects.filter(created_by=user)
+        serializer = BlogBriefSerializer(blogs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
