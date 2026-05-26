@@ -9,6 +9,7 @@ class BlogSerializer(BaseSerializer):
         fields = [
             "id",
             "title",
+            "slug",
             "cover_image",
             "content",
             "status",
@@ -17,7 +18,13 @@ class BlogSerializer(BaseSerializer):
             "created_at",
             "updated_at",
         ]
-        read_only_fields = ["created_by", "updated_by", "created_at", "updated_at"]
+        read_only_fields = [
+            "created_by",
+            "updated_by",
+            "created_at",
+            "updated_at",
+            "slug",
+        ]
         serialize_fields = {
             "created_by": UserBriefSerializer,
             "updated_by": UserBriefSerializer,
