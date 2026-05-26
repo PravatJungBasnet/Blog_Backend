@@ -19,3 +19,4 @@ class BlogViewset(CustomModelViewSet):
     queryset = Blog.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = BlogSerializer
+    lookup_field = "slug"
