@@ -22,8 +22,7 @@ class Blog(BaseModel):
 
 
 class Like(BaseModel):
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="likes")
     is_liked = models.BooleanField(default=True)
 
     def __str__(self):
@@ -31,14 +30,12 @@ class Like(BaseModel):
 
 
 class Bookmark(BaseModel):
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="bookmarks")
     is_bookmarked = models.BooleanField(default=False)
 
 
 class Comment(BaseModel):
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="comments")
     content = models.TextField()
     parent = models.ForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="replies"

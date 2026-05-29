@@ -10,4 +10,4 @@ class BlogAdmin(admin.ModelAdmin):
 
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
-    list_display = ["blog", "user", "is_liked"]
+    list_display = ["blog", "is_liked"]

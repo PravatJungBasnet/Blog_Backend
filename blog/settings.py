@@ -30,7 +30,7 @@ SECRET_KEY = "django-insecure-^p91y(876$o#+gm2sr8*p*k=chkk#i91gpns16-2emsph5k5be
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['Pravat.pythonanywhere.com']
+ALLOWED_HOSTS = ["pravat.pythonanywhere.com", "*"]
 
 
 # Application definition

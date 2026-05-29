@@ -4,8 +4,23 @@ from users.serializers import UserBriefSerializer
 from rest_framework import serializers
 
 
+class LikeBriefSerializer(BaseSerializer):
+    class Meta:
+        model = Like
+        fields = ["id", "is_liked"]
+        read_only_fields = ["id", "is_liked"]
+
+
+class CommentBriefSerializer(BaseSerializer):
+    class Meta:
+        model = Comment
+        fields = ["id", "content", "created_at", "updated_at", "created_by"]
+        serialize_fields = {"created_by": UserBriefSerializer}
+
+
 class BlogSerializer(BaseSerializer):
     like_count = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Blog
@@ -17,6 +32,9 @@ class BlogSerializer(BaseSerializer):
             "content",
             "status",
             "like_count",
+            "comments_count",
+            "likes",
+            "comments",
             "created_by",
             "updated_by",
             "created_at",
@@ -32,10 +50,15 @@ class BlogSerializer(BaseSerializer):
         serialize_fields = {
             "created_by": UserBriefSerializer,
             "updated_by": UserBriefSerializer,
+            "likes": LikeBriefSerializer,
+            "comments": CommentBriefSerializer,
         }
 
     def get_like_count(self, obj):
-        return obj.like_set.count()
+        return obj.likes.filter(is_liked=True).count()
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
 
 
 class LikeSerializer(BaseSerializer):
@@ -48,8 +71,8 @@ class LikeSerializer(BaseSerializer):
 class CommentSerializer(BaseSerializer):
     class Meta:
         model = Comment
-        fields = ["id", "blog", "user", "content", "created_at", "updated_at"]
-        read_only_fields = ["id", "user", "created_at", "updated_at"]
+        fields = ["id", "blog", "content", "created_at", "updated_at"]
+        read_only_fields = ["id", "created_at", "updated_at"]
 
 
 class BookMarkSerializer(BaseSerializer):
