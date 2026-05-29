@@ -110,10 +110,6 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 SITE_ID = 2
 
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_VERIFICATION = "none"
-
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases

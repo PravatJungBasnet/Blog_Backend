@@ -2,12 +2,12 @@ from rest_framework.viewsets import ModelViewSet
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from .models import User
-from .serializers import UserRegisterSerializer, UserSerializer
+from .serializers import UserRegisterSerializer, UserSerializer, UserDetailSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from blogs.models import Blog
-from blogs.serializers import BlogBriefSerializer
+from .serializers import BlogBriefSerializer
 from rest_framework.views import APIView
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -17,7 +17,11 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
 
     def get_serializer_class(self):
-        serializer_mapping = {"create": UserRegisterSerializer, "list": UserSerializer}
+        serializer_mapping = {
+            "create": UserRegisterSerializer,
+            "list": UserSerializer,
+            "retrieve": UserDetailSerializer,
+        }
         return serializer_mapping.get(self.action, UserSerializer)
 
     @action(detail=False, methods=["get", "put", "patch"])
