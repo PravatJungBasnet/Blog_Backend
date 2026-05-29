@@ -29,12 +29,3 @@ class BlogSerializer(BaseSerializer):
             "created_by": UserBriefSerializer,
             "updated_by": UserBriefSerializer,
         }
-<<<<<<< HEAD
-
-
-class BlogBriefSerializer(BaseSerializer):
-    class Meta:
-        model = Blog
-        fields = ["id", "title","slug", "cover_image", "content", "status", "created_at"]
-=======
->>>>>>> 0c7046d7d91710052dee357ffc40b839e5d104f9
