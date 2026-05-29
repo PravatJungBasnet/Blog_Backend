@@ -34,4 +34,4 @@ class BlogSerializer(BaseSerializer):
 class BlogBriefSerializer(BaseSerializer):
     class Meta:
         model = Blog
-        fields = ["id", "title", "cover_image", "content", "status", "created_at"]
+        fields = ["id", "title","slug", "cover_image", "content", "status", "created_at"]
