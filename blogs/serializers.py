@@ -64,8 +64,8 @@ class BlogSerializer(BaseSerializer):
 class LikeSerializer(BaseSerializer):
     class Meta:
         model = Like
-        fields = ["id", "blog", "user", "is_liked", "created_at", "updated_at"]
-        read_only_fields = ["id", "user", "created_at", "updated_at"]
+        fields = ["id", "blog", "is_liked", "created_at", "updated_at"]
+        read_only_fields = ["id", "created_at", "updated_at"]
 
 
 class CommentSerializer(BaseSerializer):
@@ -78,5 +78,5 @@ class CommentSerializer(BaseSerializer):
 class BookMarkSerializer(BaseSerializer):
     class Meta:
         model = Bookmark
-        fields = ["id", "blog", "user", "is_bookmarked", "created_at", "updated_at"]
-        read_only_fields = ["id", "user", "created_at", "updated_at"]
+        fields = ["id", "blog", "is_bookmarked", "created_at", "updated_at"]
+        read_only_fields = ["id", "created_at", "updated_at"]

@@ -32,10 +32,9 @@ class LikeView(ListCreateAPIView):
 
     def get_queryset(self):
         blog_id = self.kwargs.get("blog_id")
-        print(blog_id)
         return Like.objects.filter(
             blog_id=blog_id,
-        ).select_related("user")
+        )
 
     def create(self, request, *args, **kwargs):
         blog_id = self.kwargs.get("blog_id")
