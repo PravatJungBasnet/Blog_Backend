@@ -31,14 +31,14 @@ class LikeView(ListCreateAPIView):
     serializer_class = LikeSerializer
 
     def get_queryset(self):
-        blog_id = self.kwargs.get("blog_id")
+        slug = self.kwargs.get("slug")
         return Like.objects.filter(
-            blog_id=blog_id,
+            slug=slug,
         )
 
     def create(self, request, *args, **kwargs):
-        blog_id = self.kwargs.get("blog_id")
-        blog = get_object_or_404(Blog, id=blog_id)
+        slug = self.kwargs.get("slug")
+        blog = get_object_or_404(Blog, slug=slug)
 
         like, created = Like.objects.get_or_create(blog=blog)
         if not created:
@@ -53,11 +53,13 @@ class CommentViewSet(CustomModelViewSet):
     serializer_class = CommentSerializer
 
     def get_queryset(self):
-        return Comment.objects.filter(blog_id=self.kwargs.get("blog_id"))
+        slug = self.kwargs.get("slug")
+        blog = get_object_or_404(Blog, slug=slug)
+        return Comment.objects.filter(blog=blog)
 
     def create(self, request, *args, **kwargs):
-        blog_id = self.kwargs.get("blog_id")
-        blog = get_object_or_404(Blog, id=blog_id)
+        slug = self.kwargs.get("slug")
+        blog = get_object_or_404(Blog, slug=slug)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(blog=blog)

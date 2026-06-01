@@ -7,9 +7,9 @@ app_name = "blogs"
 router.register("", BlogViewset, basename="blogs")
 
 urlpatterns = [
-    path("<int:blog_id>/like/", LikeView.as_view(), name="like"),
+    path("<str:slug>/like/", LikeView.as_view(), name="like"),
     path(
-        "<int:blog_id>/comments/",
+        "<str:slug>/comments/",
         CommentViewSet.as_view(
             {
                 "get": "list",
