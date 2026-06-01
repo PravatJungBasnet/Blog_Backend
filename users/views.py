@@ -42,6 +42,15 @@ class UserViewSet(ModelViewSet):
         serializer = BlogBriefSerializer(blogs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=["get"])
+    def my_bookmarks(self, request):
+        user = request.user
+        blogs = Blog.objects.filter(
+            bookmarks__created_by=user, bookmarks__is_bookmarked=True
+        )
+        serializer = BlogBriefSerializer(blogs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class GoogleLogin(APIView):
     def post(self, request):

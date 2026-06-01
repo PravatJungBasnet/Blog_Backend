@@ -1,4 +1,4 @@
-from .views import BlogViewset, LikeView, CommentViewSet
+from .views import BlogViewset, BookmarkView, LikeView, CommentViewSet
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
@@ -21,5 +21,6 @@ urlpatterns = [
         ),
         name="comments",
     ),
+    path("<str:slug>/bookmark/", BookmarkView.as_view(), name="bookmark"),
 ]
 urlpatterns += router.urls

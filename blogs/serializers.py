@@ -45,7 +45,9 @@ class BlogSerializer(BaseSerializer):
             "updated_by",
             "created_at",
             "updated_at",
+            "likes",
             "slug",
+            "comments",
         ]
         serialize_fields = {
             "created_by": UserBriefSerializer,
@@ -75,8 +77,8 @@ class CommentSerializer(BaseSerializer):
         read_only_fields = ["id", "created_at", "updated_at"]
 
 
-class BookMarkSerializer(BaseSerializer):
+class BookmarkSerializer(BaseSerializer):
     class Meta:
         model = Bookmark
         fields = ["id", "blog", "is_bookmarked", "created_at", "updated_at"]
-        read_only_fields = ["id", "created_at", "updated_at"]
+        read_only_fields = ["id", "blog", "created_at", "updated_at"]
