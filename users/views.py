@@ -1,13 +1,14 @@
 from rest_framework.viewsets import ModelViewSet
 from google.oauth2 import id_token
 from google.auth.transport import requests
+
+from blogs.serializers import BlogSerializer
 from .models import User
 from .serializers import UserRegisterSerializer, UserSerializer, UserDetailSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from blogs.models import Blog
-from .serializers import BlogBriefSerializer
 from rest_framework.views import APIView
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -39,7 +40,7 @@ class UserViewSet(ModelViewSet):
     def my_blogs(self, request):
         user = request.user
         blogs = Blog.objects.filter(created_by=user)
-        serializer = BlogBriefSerializer(blogs, many=True)
+        serializer = BlogSerializer(blogs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["get"])
@@ -48,7 +49,7 @@ class UserViewSet(ModelViewSet):
         blogs = Blog.objects.filter(
             bookmarks__created_by=user, bookmarks__is_bookmarked=True
         )
-        serializer = BlogBriefSerializer(blogs, many=True)
+        serializer = BlogSerializer(blogs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
