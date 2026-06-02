@@ -40,7 +40,7 @@ class UserViewSet(ModelViewSet):
     def my_blogs(self, request):
         user = request.user
         blogs = Blog.objects.filter(created_by=user)
-        serializer = BlogSerializer(blogs, many=True)
+        serializer = BlogSerializer(blogs, many=True, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["get"])
@@ -49,7 +49,7 @@ class UserViewSet(ModelViewSet):
         blogs = Blog.objects.filter(
             bookmarks__created_by=user, bookmarks__is_bookmarked=True
         )
-        serializer = BlogSerializer(blogs, many=True)
+        serializer = BlogSerializer(blogs, many=True, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
