@@ -7,9 +7,12 @@ from rest_framework import serializers
 class LikeBriefSerializer(BaseSerializer):
     class Meta:
         model = Like
-        fields = ["id", "is_liked", "created_by"]
-        read_only_fields = ["id", "is_liked", "created_by"]
-        serialize_fields = {"created_by": UserBriefSerializer}
+        fields = ["id", "is_liked", "created_by", "updated_by"]
+        read_only_fields = ["id", "is_liked", "created_by", "updated_by"]
+        serialize_fields = {
+            "created_by": UserBriefSerializer,
+            "updated_by": UserBriefSerializer,
+        }
 
 
 class CommentBriefSerializer(BaseSerializer):
