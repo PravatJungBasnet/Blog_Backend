@@ -1,4 +1,4 @@
-from .views import UserViewSet, GoogleLogin
+from .views import UserViewSet, GoogleLogin, FollowView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -16,5 +16,6 @@ urlpatterns = [
     path("login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("google/", GoogleLogin.as_view(), name="google_login"),
+    path("<int:id>/follow/", FollowView.as_view(), name="follow"),
 ]
 urlpatterns += router.urls

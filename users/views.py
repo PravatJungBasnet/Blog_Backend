@@ -3,15 +3,23 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 
 from blogs.serializers import BlogSerializer
-from .models import User
-from .serializers import UserRegisterSerializer, UserSerializer, UserDetailSerializer
+from .models import User, Follow
+from .serializers import (
+    UserRegisterSerializer,
+    UserSerializer,
+    UserDetailSerializer,
+    FollowSerializer,
+)
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.generics import ListCreateAPIView
+
 from rest_framework import status
 from blogs.models import Blog
 from rest_framework.views import APIView
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import get_object_or_404
 
 
 class UserViewSet(ModelViewSet):
@@ -92,3 +100,29 @@ class GoogleLogin(APIView):
 
         except Exception as e:
             return Response({"error": str(e)}, status=400)
+
+
+class FollowView(ListCreateAPIView):
+    serializer_class = FollowSerializer
+
+    def get_queryset(self):
+        id = self.kwargs.get("id")
+        user = get_object_or_404(User, id=id)
+        return Follow.objects.filter(following=user, is_followed=True)
+
+    def create(self, request, *args, **kwargs):
+        id = self.kwargs.get("id")
+        user = get_object_or_404(User, id=id)
+        if user == self.request.user:
+            return Response(
+                {"error": "You cannot follow yourself"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        following, created = Follow.objects.get_or_create(
+            following=user, follower=self.request.user
+        )
+        if not created:
+            following.is_followed = not following.is_followed
+            following.save(update_fields=["is_followed", "updated_at"])
+        serializer = self.get_serializer(following)
+        return Response(serializer.data, status=status.HTTP_200_OK)

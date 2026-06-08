@@ -86,3 +86,14 @@ class User(AbstractBaseUser, PermissionsMixin):
             return "Deleted User"
         else:
             return f"{self.first_name} {self.last_name}"
+
+
+class Follow(models.Model):
+    follower = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="follower"
+    )
+    following = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="following"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_followed = models.BooleanField(default=True)

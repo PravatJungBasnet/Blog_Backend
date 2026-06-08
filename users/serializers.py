@@ -1,4 +1,4 @@
-from .models import User
+from .models import User, Follow
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from blogs.models import Blog
@@ -43,6 +43,9 @@ class UserBriefSerializer(ModelSerializer):
 
 
 class BlogBriefSerializer(ModelSerializer):
+    like_count = serializers.SerializerMethodField()
+    comment_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Blog
         fields = [
@@ -50,14 +53,25 @@ class BlogBriefSerializer(ModelSerializer):
             "title",
             "slug",
             "cover_image",
+            "likes",
+            "like_count",
+            "comment_count",
             "content",
             "status",
             "created_at",
         ]
 
+    def get_like_count(self, obj):
+        return obj.likes.filter(is_liked=True).count()
+
+    def get_comment_count(self, obj):
+        return obj.comments.count()
+
 
 class UserDetailSerializer(ModelSerializer):
     blogs = BlogBriefSerializer(many=True, read_only=True, source="blog_created_by")
+    follower_count = serializers.SerializerMethodField()
+    following_count = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -70,4 +84,19 @@ class UserDetailSerializer(ModelSerializer):
             "address",
             "detail",
             "blogs",
+            "follower_count",
+            "following_count",
         ]
+
+    def get_follower_count(self, obj):
+        return obj.follower.count()
+
+    def get_following_count(self, obj):
+        return obj.following.filter(is_followed=True).count()
+
+
+class FollowSerializer(ModelSerializer):
+    class Meta:
+        model = Follow
+        fields = ["id", "follower", "following", "is_followed", "created_at"]
+        read_only_fields = ["id", "created_at", "follower"]

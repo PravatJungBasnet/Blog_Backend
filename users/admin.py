@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import User
+from .models import User, Follow
 
 
 @admin.register(User)
@@ -45,3 +45,8 @@ class UserAdmin(BaseUserAdmin):
         self.message_user(request, f"{restored_account} user(s) successfully restored.")
 
     actions = ["restore_user"]
+
+
+@admin.register(Follow)
+class FollowAdmin(admin.ModelAdmin):
+    list_display = ["following", "follower"]
