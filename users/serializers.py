@@ -68,10 +68,18 @@ class BlogBriefSerializer(ModelSerializer):
         return obj.comments.count()
 
 
+class FollowSerializer(ModelSerializer):
+    class Meta:
+        model = Follow
+        fields = ["id", "follower", "following", "is_followed", "created_at"]
+        read_only_fields = ["id", "created_at", "follower"]
+
+
 class UserDetailSerializer(ModelSerializer):
     blogs = BlogBriefSerializer(many=True, read_only=True, source="blog_created_by")
     follower_count = serializers.SerializerMethodField()
     following_count = serializers.SerializerMethodField()
+    is_followed = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -86,6 +94,7 @@ class UserDetailSerializer(ModelSerializer):
             "blogs",
             "follower_count",
             "following_count",
+            "is_followed",
         ]
 
     def get_follower_count(self, obj):
@@ -94,9 +103,6 @@ class UserDetailSerializer(ModelSerializer):
     def get_following_count(self, obj):
         return obj.following.filter(is_followed=True).count()
 
-
-class FollowSerializer(ModelSerializer):
-    class Meta:
-        model = Follow
-        fields = ["id", "follower", "following", "is_followed", "created_at"]
-        read_only_fields = ["id", "created_at", "follower"]
+    def get_is_followed(self, obj):
+        request = self.context["request"]
+        return obj.following.filter(is_followed=True, follower=request.user).exists()
