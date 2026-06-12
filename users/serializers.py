@@ -76,7 +76,7 @@ class FollowSerializer(ModelSerializer):
 
 
 class UserDetailSerializer(ModelSerializer):
-    blogs = BlogBriefSerializer(many=True, read_only=True, source="blog_created_by")
+    blogs = serializers.SerializerMethodField()
     follower_count = serializers.SerializerMethodField()
     following_count = serializers.SerializerMethodField()
     is_followed = serializers.SerializerMethodField()
@@ -106,3 +106,11 @@ class UserDetailSerializer(ModelSerializer):
     def get_is_followed(self, obj):
         request = self.context["request"]
         return obj.following.filter(is_followed=True, follower=request.user).exists()
+
+    def get_blogs(self, obj):
+        from blogs.serializers import (
+            BlogSerializer,
+        )  # ✅ lazy import here, inside method
+
+        blogs = obj.blog_created_by.all()
+        return BlogSerializer(blogs, many=True).data
